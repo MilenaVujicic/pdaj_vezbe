@@ -1,0 +1,24 @@
+version: "3.7"
+
+services:
+  django:
+    build: .
+    restart: on-failure:10
+    ports:
+      - "8000:8000"
+    links:
+      - queue
+    depends_on:
+      - queue
+
+  queue:
+    image: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    ports:
+      - "5672:5672"
+
+  redis_db:
+    image: redis
+    hostname: redis
